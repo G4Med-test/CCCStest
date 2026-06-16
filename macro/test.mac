@@ -1,0 +1,31 @@
+#
+# Macro file for "CCCStest.cc"
+# (can be run in batch, without graphic)
+#
+#
+/control/verbose 2
+/run/verbose 2
+/tracking/verbose 0
+#
+/testhadr/det/setMat G4_WATER
+/testhadr/det/setSize 10000 mm 
+#
+/physics/addPhysics QMD
+#/physics/addPhysics QGSP_BIC_EMY
+#/physics/addPhysics QGSP_BIC_HP_EMY
+#/physics/addPhysics INCL
+#/physics/addPhysics QBBC
+
+/run/initialize
+
+#
+/process/list
+#
+/gun/particle ion
+/gun/ion 6 12
+/gun/energy 3600 MeV
+#
+/run/printProgress 100
+
+/run/beamOn 1000
+
