@@ -5,7 +5,13 @@ on:
     branches: [ "master", "main" ]
   pull_request:
     branches: [ "master", "main" ]
+  # Also started by ci-workflows when a new Geant4 version is published.
   workflow_dispatch:
+    inputs:
+      geant4_tag:
+        description: geant4-alma9 tag to build with (empty = TAG default in Apptainer.def)
+        default: ""
+        type: string
 
 jobs:
   run-pipeline:
@@ -15,5 +21,7 @@ jobs:
     permissions:
       contents: read
       packages: write
+      actions: write
+    secrets: inherit
     with:
-      image_name: "${{ github.event.repository.name }}.sif"
+      geant4_tag: ${{ inputs.geant4_tag }}

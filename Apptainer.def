@@ -1,9 +1,9 @@
-Bootstrap: docker
-From: carlomt/geant4:{{ TAG }}
+Bootstrap: oras
+From: ghcr.io/g4med-test/geant4-alma9:{{ TAG }}
 
 %arguments
     # Default values
-    TAG=11.3.2-almalinux9
+    TAG=v11.3.2
     PROJECT_NAME=G4TestGeneric
 
 %labels
@@ -15,19 +15,12 @@ From: carlomt/geant4:{{ TAG }}
 %files
     . /source
 
-%environment
-    export G4DATA_DIR=/g4data
-    export G4INSTALL=/usr/local
-    export LD_LIBRARY_PATH=/usr/local/lib64:$LD_LIBRARY_PATH
-    export CMAKE_PREFIX_PATH=/usr/local:$CMAKE_PREFIX_PATH
-    # Aggiungiamo il bin al path così possiamo chiamare l'eseguibile ovunque
-    export PATH=/usr/local/bin:$PATH
-
 %post
-    mkdir build && cd build
-    cmake -DPROJECT_NAME_OVERRIDE="{{ PROJECT_NAME }}" ../source
-    make -j$(nproc)
-    make install
+    set -eu
+    cmake -S /source -B /tmp/g4med-build -DCMAKE_PREFIX_PATH=/opt/geant4 -DPROJECT_NAME_OVERRIDE="{{ PROJECT_NAME }}"
+    cmake --build /tmp/g4med-build --parallel "$(nproc)"
+    cmake --install /tmp/g4med-build
+    rm -rf /tmp/g4med-build
 
 %runscript
     echo "Running {{ PROJECT_NAME }} simulation..."

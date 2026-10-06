@@ -26,6 +26,6 @@
 /gun/energy 3600 MeV
 #
 /run/printProgress 100
+/testhadr/run/printStat true
 
 /run/beamOn 1000
-
